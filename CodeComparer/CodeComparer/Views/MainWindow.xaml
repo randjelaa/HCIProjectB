@@ -47,47 +47,75 @@
 
         <!-- Diff Results -->
         <ScrollViewer Grid.Row="2" Grid.ColumnSpan="2" Margin="5" VerticalScrollBarVisibility="Auto">
-            <ItemsControl ItemsSource="{Binding LineComparisons}">
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <Grid Margin="1">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="*" />
-                            </Grid.ColumnDefinitions>
+            <StackPanel>
 
-                            <!-- Original (Left) -->
-                            <TextBlock Grid.Column="0" Text="{Binding LeftText}" Padding="4">
-                                <TextBlock.Style>
-                                    <Style TargetType="TextBlock">
-                                        <Style.Triggers>
-                                            <DataTrigger Binding="{Binding LeftChangeType}" Value="Deleted">
-                                                <Setter Property="Background" Value="LightCoral" />
-                                            </DataTrigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </TextBlock.Style>
-                            </TextBlock>
+                <!-- Legend -->
+                <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+                    <TextBlock Text="Legend: " FontWeight="Bold" Margin="0,0,10,0"/>
+                    <Border Background="LightCoral" Padding="5" Margin="5">
+                        <TextBlock Text="Deleted" />
+                    </Border>
+                    <Border Background="LightGreen" Padding="5" Margin="5">
+                        <TextBlock Text="Inserted" />
+                    </Border>
+                    <Border Background="PeachPuff" Padding="5" Margin="5">
+                        <TextBlock Text="Modified" />
+                    </Border>
+                </StackPanel>
 
-                            <!-- Modified (Right) -->
-                            <TextBlock Grid.Column="1" Text="{Binding RightText}" Padding="4">
-                                <TextBlock.Style>
-                                    <Style TargetType="TextBlock">
-                                        <Style.Triggers>
-                                            <DataTrigger Binding="{Binding RightChangeType}" Value="Inserted">
-                                                <Setter Property="Background" Value="LightGreen" />
-                                            </DataTrigger>
-                                            <DataTrigger Binding="{Binding RightChangeType}" Value="Modified">
-                                                <Setter Property="Background" Value="PeachPuff" />
-                                            </DataTrigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </TextBlock.Style>
-                            </TextBlock>
-                        </Grid>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
+                <!-- Diff Results -->
+                <ItemsControl ItemsSource="{Binding LineComparisons}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Grid Margin="1">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+
+                                <!-- Original (Left) -->
+                                <TextBlock Grid.Column="0" Text="{Binding LeftText}" Padding="4">
+                                    <TextBlock.Style>
+                                        <Style TargetType="TextBlock">
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding LeftChangeType}" Value="Deleted">
+                                                    <Setter Property="Background" Value="LightCoral" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </TextBlock.Style>
+                                </TextBlock>
+
+                                <!-- Modified (Right) -->
+                                <TextBlock Grid.Column="1" Text="{Binding RightText}" Padding="4">
+                                    <TextBlock.Style>
+                                        <Style TargetType="TextBlock">
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding RightChangeType}" Value="Inserted">
+                                                    <Setter Property="Background" Value="LightGreen" />
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding RightChangeType}" Value="Modified">
+                                                    <Setter Property="Background" Value="PeachPuff" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </TextBlock.Style>
+                                </TextBlock>
+                            </Grid>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+
+                <!-- Statistics -->
+                <StackPanel Orientation="Horizontal" Margin="10,20,0,0">
+                    <TextBlock Text="Statistics: " FontWeight="Bold" Margin="0,0,10,0"/>
+                    <TextBlock Text="{Binding SameCount, StringFormat=Same: {0}}" Margin="10,0"/>
+                    <TextBlock Text="{Binding DeletedCount, StringFormat=Deleted: {0}}" Margin="10,0"/>
+                    <TextBlock Text="{Binding InsertedCount, StringFormat=Inserted: {0}}" Margin="10,0"/>
+                    <TextBlock Text="{Binding ModifiedCount, StringFormat=Modified: {0}}" Margin="10,0"/>
+                </StackPanel>
+
+            </StackPanel>
         </ScrollViewer>
     </Grid>
 </Window>

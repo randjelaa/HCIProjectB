@@ -7,6 +7,7 @@ using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Input;
+using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace CodeComparer.ViewModels
 {
@@ -16,7 +17,7 @@ namespace CodeComparer.ViewModels
         public ChangeType ChangeType { get; set; }
     }
 
-    public class MainViewModel : BaseViewModel
+    public class MainViewModel : CommunityToolkit.Mvvm.ComponentModel.ObservableObject
     {
         private string _leftCode;
         public string LeftCode
@@ -31,6 +32,18 @@ namespace CodeComparer.ViewModels
             get => _rightCode;
             set { _rightCode = value; OnPropertyChanged(); }
         }
+
+        private int _sameCount;
+        public int SameCount { get => _sameCount; set => SetProperty(ref _sameCount, value); }
+
+        private int _insertedCount;
+        public int InsertedCount { get => _insertedCount; set => SetProperty(ref _insertedCount, value); }
+
+        private int _deletedCount;
+        public int DeletedCount { get => _deletedCount; set => SetProperty(ref _deletedCount, value); }
+
+        private int _modifiedCount;
+        public int ModifiedCount { get => _modifiedCount; set => SetProperty(ref _modifiedCount, value); }
 
         public ObservableCollection<CodeLineComparison> LineComparisons { get; set; } = new();
 
@@ -51,10 +64,24 @@ namespace CodeComparer.ViewModels
 
             int maxLines = Math.Max(diff.OldText.Lines.Count, diff.NewText.Lines.Count);
 
+            SameCount = InsertedCount = DeletedCount = ModifiedCount = 0;
+
             for (int i = 0; i < maxLines; i++)
             {
                 var oldLine = i < diff.OldText.Lines.Count ? diff.OldText.Lines[i] : null;
                 var newLine = i < diff.NewText.Lines.Count ? diff.NewText.Lines[i] : null;
+
+                if (oldLine?.Type == ChangeType.Unchanged && newLine?.Type == ChangeType.Unchanged)
+                    SameCount++;
+                else
+                {
+                    if (oldLine?.Type == ChangeType.Deleted)
+                        DeletedCount++;
+                    if (newLine?.Type == ChangeType.Inserted)
+                        InsertedCount++;
+                    if (newLine?.Type == ChangeType.Modified)
+                        ModifiedCount++;
+                }
 
                 LineComparisons.Add(new CodeLineComparison
                 {
@@ -65,6 +92,5 @@ namespace CodeComparer.ViewModels
                 });
             }
         }
-
     }
 }
