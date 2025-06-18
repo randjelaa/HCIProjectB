@@ -15,38 +15,51 @@
 
     <Grid Margin="10">
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <!-- Import Buttons -->
             <RowDefinition Height="2*" />
             <!-- TextBoxes -->
             <RowDefinition Height="Auto" />
-            <!-- Button -->
+            <!-- Compare Button -->
             <RowDefinition Height="3*" />
-            <!-- ListBox -->
+            <!-- Diff Results -->
         </Grid.RowDefinitions>
+
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
+        
+        <!-- Import Buttons -->
+        <StackPanel Grid.Row="0" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="5">
+            <Button Content="Import Left File" Margin="5"
+            Command="{Binding ImportLeftCommand}"
+            Style="{StaticResource MaterialDesignOutlinedButton}" />
+            <Button Content="Import Right File" Margin="5"
+            Command="{Binding ImportRightCommand}"
+            Style="{StaticResource MaterialDesignOutlinedButton}" />
+        </StackPanel>
 
         <!-- Left Code Input -->
-        <TextBox Grid.Row="0" Grid.Column="0" Margin="5" AcceptsReturn="True" TextWrapping="Wrap"
+        <TextBox Grid.Row="1" Grid.Column="0" Margin="5" AcceptsReturn="True" TextWrapping="Wrap"
                  Text="{Binding LeftCode, UpdateSourceTrigger=PropertyChanged}" 
                  materialDesign:HintAssist.Hint="Original Code"
                  Style="{StaticResource MaterialDesignOutlinedTextBox}" />
 
         <!-- Right Code Input -->
-        <TextBox Grid.Row="0" Grid.Column="1" Margin="5" AcceptsReturn="True" TextWrapping="Wrap"
+        <TextBox Grid.Row="1" Grid.Column="1" Margin="5" AcceptsReturn="True" TextWrapping="Wrap"
                  Text="{Binding RightCode, UpdateSourceTrigger=PropertyChanged}"
                  materialDesign:HintAssist.Hint="Modified Code"
                  Style="{StaticResource MaterialDesignOutlinedTextBox}" />
 
         <!-- Compare Button -->
-        <Button Grid.Row="1" Grid.ColumnSpan="2" Height="40" Margin="5"
+        <Button Grid.Row="2" Grid.ColumnSpan="2" Height="40" Margin="5"
                 Content="Compare"
                 Command="{Binding CompareCommand}"
                 Style="{StaticResource MaterialDesignRaisedButton}" />
 
         <!-- Diff Results -->
-        <ScrollViewer Grid.Row="2" Grid.ColumnSpan="2" Margin="5" VerticalScrollBarVisibility="Auto">
+        <ScrollViewer Grid.Row="3" Grid.ColumnSpan="2" Margin="5" VerticalScrollBarVisibility="Auto">
             <StackPanel>
 
                 <!-- Legend -->

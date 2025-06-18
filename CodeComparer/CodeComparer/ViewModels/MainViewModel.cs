@@ -8,6 +8,8 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Input;
 using CommunityToolkit.Mvvm.ComponentModel;
+using Microsoft.Win32;
+using System.IO;
 
 namespace CodeComparer.ViewModels
 {
@@ -48,11 +50,15 @@ namespace CodeComparer.ViewModels
         public ObservableCollection<CodeLineComparison> LineComparisons { get; set; } = new();
 
         public ICommand CompareCommand { get; }
+        public IRelayCommand ImportLeftCommand { get; }
+        public IRelayCommand ImportRightCommand { get; }
 
         public MainViewModel()
         {
             System.Diagnostics.Debug.WriteLine("MainViewModel created");
             CompareCommand = new RelayCommand(CompareCodes);
+            ImportLeftCommand = new RelayCommand(ImportLeftFile);
+            ImportRightCommand = new RelayCommand(ImportRightFile);
         }
 
         private void CompareCodes()
@@ -91,6 +97,42 @@ namespace CodeComparer.ViewModels
                     RightChangeType = newLine?.Type ?? ChangeType.Imaginary
                 });
             }
+        }
+
+        private void ImportLeftFile()
+        {
+            var content = OpenFile();
+            if (content != null)
+                LeftCode = content;
+        }
+
+        private void ImportRightFile()
+        {
+            var content = OpenFile();
+            if (content != null)
+                RightCode = content;
+        }
+
+        private string? OpenFile()
+        {
+            var dialog = new OpenFileDialog
+            {
+                Filter = "Code files (*.cs;*.txt;*.java;*.py)|*.cs;*.txt;*.java;*.py|All files (*.*)|*.*"
+            };
+
+            if (dialog.ShowDialog() == true)
+            {
+                try
+                {
+                    return File.ReadAllText(dialog.FileName);
+                }
+                catch (Exception ex)
+                {
+                    // optionally handle errors (e.g., show a MessageBox)
+                }
+            }
+
+            return null;
         }
     }
 }
