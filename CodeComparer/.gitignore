@@ -1,0 +1,13 @@
+﻿# Ignore VS temporary files
+.vs/
+*.user
+*.suo
+*.cache
+*.dbmdl
+*.log
+*.pdb
+
+# Ignore bin and obj
+bin/
+obj/
+
