@@ -20,6 +20,7 @@
             <RowDefinition Height="2*" />
             <!-- TextBoxes -->
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
             <!-- Compare Button -->
             <RowDefinition Height="3*" />
             <!-- Diff Results -->
@@ -60,8 +61,19 @@
                 Command="{Binding CompareCommand}"
                 Style="{StaticResource MaterialDesignRaisedButton}" />
 
+        <StackPanel Grid.Row="3" Grid.ColumnSpan="2" Orientation="Horizontal" Margin="5">
+            <TextBox Width="300" Margin="0,0,10,0"
+             Text="{Binding SearchQuery, UpdateSourceTrigger=PropertyChanged}"
+             materialDesign:HintAssist.Hint="Search term"
+             Style="{StaticResource MaterialDesignOutlinedTextBox}" />
+
+            <Button Content="Search"
+            Command="{Binding SearchCommand}"
+            Style="{StaticResource MaterialDesignOutlinedButton}" />
+        </StackPanel>
+
         <!-- Diff Results -->
-        <ScrollViewer Grid.Row="3" Grid.ColumnSpan="2" Margin="5" VerticalScrollBarVisibility="Auto">
+        <ScrollViewer Grid.Row="4" Grid.ColumnSpan="2" Margin="5" VerticalScrollBarVisibility="Auto">
             <StackPanel>
 
                 <!-- Legend -->
@@ -96,6 +108,9 @@
                                                 <DataTrigger Binding="{Binding LeftChangeType}" Value="Deleted">
                                                     <Setter Property="Background" Value="LightCoral" />
                                                 </DataTrigger>
+                                                <DataTrigger Binding="{Binding IsMatch}" Value="True">
+                                                    <Setter Property="TextDecorations" Value="Underline" />
+                                                </DataTrigger>
                                             </Style.Triggers>
                                         </Style>
                                     </TextBlock.Style>
@@ -111,6 +126,9 @@
                                                 </DataTrigger>
                                                 <DataTrigger Binding="{Binding RightChangeType}" Value="Modified">
                                                     <Setter Property="Background" Value="PeachPuff" />
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding IsMatch}" Value="True">
+                                                    <Setter Property="TextDecorations" Value="Underline" />
                                                 </DataTrigger>
                                             </Style.Triggers>
                                         </Style>
@@ -133,7 +151,7 @@
             </StackPanel>
         </ScrollViewer>
 
-        <Button Grid.Row="4" Grid.ColumnSpan="2" Height="40" Margin="5"
+        <Button Grid.Row="5" Grid.ColumnSpan="2" Height="40" Margin="5"
         Content="Export Results"
         Command="{Binding ExportCommand}"
         Style="{StaticResource MaterialDesignOutlinedButton}" />

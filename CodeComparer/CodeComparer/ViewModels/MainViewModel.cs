@@ -47,12 +47,20 @@ namespace CodeComparer.ViewModels
         private int _modifiedCount;
         public int ModifiedCount { get => _modifiedCount; set => SetProperty(ref _modifiedCount, value); }
 
+        private string _searchQuery;
+        public string SearchQuery
+        {
+            get => _searchQuery;
+            set => SetProperty(ref _searchQuery, value);
+        }
+
         public ObservableCollection<CodeLineComparison> LineComparisons { get; set; } = new();
 
         public ICommand CompareCommand { get; }
         public IRelayCommand ImportLeftCommand { get; }
         public IRelayCommand ImportRightCommand { get; }
         public IRelayCommand ExportCommand { get; }
+        public IRelayCommand SearchCommand { get; }
 
         public MainViewModel()
         {
@@ -61,6 +69,7 @@ namespace CodeComparer.ViewModels
             ImportLeftCommand = new RelayCommand(ImportLeftFile);
             ImportRightCommand = new RelayCommand(ImportRightFile);
             ExportCommand = new RelayCommand(ExportResults);
+            SearchCommand = new RelayCommand(PerformSearch);
         }
 
         private void CompareCodes()
@@ -180,6 +189,22 @@ namespace CodeComparer.ViewModels
                     writer.WriteLine($"Modified: {right}");
                     writer.WriteLine();
                 }
+            }
+        }
+
+        private void PerformSearch()
+        {
+            if (string.IsNullOrWhiteSpace(SearchQuery))
+            {
+                foreach (var item in LineComparisons)
+                    item.IsMatch = false;
+                return;
+            }
+
+            foreach (var item in LineComparisons)
+            {
+                item.IsMatch = (item.LeftText?.Contains(SearchQuery, StringComparison.OrdinalIgnoreCase) == true)
+                               || (item.RightText?.Contains(SearchQuery, StringComparison.OrdinalIgnoreCase) == true);
             }
         }
     }

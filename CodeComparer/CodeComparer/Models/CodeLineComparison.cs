@@ -1,18 +1,23 @@
 ﻿using DiffPlex.DiffBuilder.Model;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace CodeComparer.Models
 {
-    public class CodeLineComparison
+    public partial class CodeLineComparison : ObservableObject
     {
-        public string LeftText { get; set; }
-        public string RightText { get; set; }
+        [ObservableProperty]
+        private string leftText;
 
-        public ChangeType LeftChangeType { get; set; }
-        public ChangeType RightChangeType { get; set; }
+        [ObservableProperty]
+        private string rightText;
+
+        [ObservableProperty]
+        private ChangeType leftChangeType;
+
+        [ObservableProperty]
+        private ChangeType rightChangeType;
+
+        [ObservableProperty]
+        private bool isMatch;
     }
 }
