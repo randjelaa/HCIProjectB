@@ -54,6 +54,21 @@ namespace CodeComparer.ViewModels
             set => SetProperty(ref _searchQuery, value);
         }
 
+        private string? _leftFileName;
+        public string? LeftFileName
+        {
+            get => _leftFileName;
+            set { _leftFileName = value; OnPropertyChanged(); }
+        }
+
+        private string? _rightFileName;
+        public string? RightFileName
+        {
+            get => _rightFileName;
+            set { _rightFileName = value; OnPropertyChanged(); }
+        }
+
+
         public ObservableCollection<CodeLineComparison> LineComparisons { get; set; } = new();
 
         public ICommand CompareCommand { get; }
@@ -112,19 +127,27 @@ namespace CodeComparer.ViewModels
 
         private void ImportLeftFile()
         {
-            var content = OpenFile();
-            if (content != null)
-                LeftCode = content;
+            var result = OpenFile();
+            if (result != null)
+            {
+                LeftCode = result.Value.Content;
+                LeftFileName = Path.GetFileName(result.Value.FilePath);
+            }
         }
 
         private void ImportRightFile()
         {
-            var content = OpenFile();
-            if (content != null)
-                RightCode = content;
+            var result = OpenFile();
+            if (result != null)
+            {
+                RightCode = result.Value.Content;
+                RightFileName = Path.GetFileName(result.Value.FilePath);
+            }
         }
 
-        private string? OpenFile()
+
+        // Return file content + path
+        private (string Content, string FilePath)? OpenFile()
         {
             var dialog = new OpenFileDialog
             {
@@ -135,16 +158,19 @@ namespace CodeComparer.ViewModels
             {
                 try
                 {
-                    return File.ReadAllText(dialog.FileName);
+                    string content = File.ReadAllText(dialog.FileName);
+                    return (content, dialog.FileName);
                 }
                 catch (Exception ex)
                 {
-                    // optionally handle errors (e.g., show a MessageBox)
+                    // Optional: handle or log error
                 }
             }
 
             return null;
         }
+
+
 
         private void ExportResults()
         {
