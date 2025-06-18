@@ -23,6 +23,8 @@
             <!-- Compare Button -->
             <RowDefinition Height="3*" />
             <!-- Diff Results -->
+            <RowDefinition Height="Auto" />
+            <!-- Export Button -->
         </Grid.RowDefinitions>
 
         <Grid.ColumnDefinitions>
@@ -130,5 +132,11 @@
 
             </StackPanel>
         </ScrollViewer>
+
+        <Button Grid.Row="4" Grid.ColumnSpan="2" Height="40" Margin="5"
+        Content="Export Results"
+        Command="{Binding ExportCommand}"
+        Style="{StaticResource MaterialDesignOutlinedButton}" />
+
     </Grid>
 </Window>

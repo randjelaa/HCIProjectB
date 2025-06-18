@@ -52,6 +52,7 @@ namespace CodeComparer.ViewModels
         public ICommand CompareCommand { get; }
         public IRelayCommand ImportLeftCommand { get; }
         public IRelayCommand ImportRightCommand { get; }
+        public IRelayCommand ExportCommand { get; }
 
         public MainViewModel()
         {
@@ -59,6 +60,7 @@ namespace CodeComparer.ViewModels
             CompareCommand = new RelayCommand(CompareCodes);
             ImportLeftCommand = new RelayCommand(ImportLeftFile);
             ImportRightCommand = new RelayCommand(ImportRightFile);
+            ExportCommand = new RelayCommand(ExportResults);
         }
 
         private void CompareCodes()
@@ -133,6 +135,52 @@ namespace CodeComparer.ViewModels
             }
 
             return null;
+        }
+
+        private void ExportResults()
+        {
+            var dialog = new SaveFileDialog
+            {
+                FileName = "CodeComparisonResults",
+                DefaultExt = ".txt",
+                Filter = "Text documents (.txt)|*.txt"
+            };
+
+            if (dialog.ShowDialog() == true)
+            {
+                using var writer = new StreamWriter(dialog.FileName);
+
+                writer.WriteLine("== Code Comparison Results ==");
+                writer.WriteLine($"Same Lines: {SameCount}");
+                writer.WriteLine($"Inserted Lines: {InsertedCount}");
+                writer.WriteLine($"Deleted Lines: {DeletedCount}");
+                writer.WriteLine($"Modified Lines: {ModifiedCount}");
+                writer.WriteLine();
+                writer.WriteLine("== Differences ==");
+                writer.WriteLine();
+
+                foreach (var line in LineComparisons)
+                {
+                    string left = line.LeftText ?? "";
+                    string right = line.RightText ?? "";
+
+                    string status = line.LeftChangeType switch
+                    {
+                        ChangeType.Deleted => "Deleted",
+                        _ => line.RightChangeType switch
+                        {
+                            ChangeType.Inserted => "Inserted",
+                            ChangeType.Modified => "Modified",
+                            _ => "Same"
+                        }
+                    };
+
+                    writer.WriteLine($"[{status}]");
+                    writer.WriteLine($"Original: {left}");
+                    writer.WriteLine($"Modified: {right}");
+                    writer.WriteLine();
+                }
+            }
         }
     }
 }
