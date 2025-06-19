@@ -1,0 +1,11 @@
+Aplikacija za prikazivanje razlika između dva bloka koda
+
+Aplikacija ima sljedeće funkcionalnosti:
+• Učitavanje blokova koda: prekopiran tekst ili importovan fajl
+• Prikazivanje razlika između blokova koda
+• Obilježavanje razlika bojama (dodato, izmijenjeno, obrisano)
+• Prikaz statistike razlika (broj dodanih, izmijenjenih i obrisanih linija)
+• Eksportovanje rezultata
+• Pretraga ključnih riječi ili teksta
+
+Link do GitHub repozitorijuma: https://github.com/randjelaa/HCIProjectB
